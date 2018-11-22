@@ -13,3 +13,7 @@ alien-invasion
 
 # Output of the go coverage tool, specifically when used with LiteIDE
 *.out
+
+# Ignore Vim swap files
+*.swp
+
