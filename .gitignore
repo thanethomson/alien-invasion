@@ -17,3 +17,6 @@ alien-invasion
 # Ignore Vim swap files
 *.swp
 
+# Vendor-related code
+/vendor/*
+!/vendor/.gitkeep
