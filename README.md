@@ -4,6 +4,10 @@
 This program attempts to solve the **Alien Invasion** coding puzzle. More
 details regarding the problem will be added to this README soon.
 
+## Requirements
+At present, this code is only being tested on MacOS, but should compile just as
+well on most Linux distros that support Golang.
+
 ## Assumptions
 The following assumptions have been made when looking at the problem definition:
 
