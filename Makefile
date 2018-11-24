@@ -27,7 +27,7 @@ all: clean vendor test alien-invasion
 
 # Run all of our tests
 test: clean vendor
-	go test $(PKGS)
+	go test -v $(PKGS)
 
 .PHONY: clean vendor
 
