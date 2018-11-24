@@ -30,4 +30,7 @@ The following assumptions have been made when looking at the problem definition:
   nowhere to go.
 * When aliens are randomly placed across the map, they are placed on cities and
   not on empty spots on the map.
+* The stop criterion for the program of 10,000 moves per alien should rather be
+  considered as 10,000 **potential moves**, otherwise trapped aliens could
+  result in the program running forever.
 
