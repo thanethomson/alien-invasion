@@ -11,6 +11,7 @@ well on most Linux distros that support Golang.
 ## Assumptions
 The following assumptions have been made when looking at the problem definition:
 
+* A minimum of 2 aliens is necessary for a meaningful simulation.
 * The map is visualised as a grid, where cities occupy single squares within
   that grid.
 * Necessarily, it will be possible for there to be empty squares within the map
