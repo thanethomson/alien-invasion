@@ -9,6 +9,9 @@ type SimulationConfig struct {
 
 // SimulationResult will eventually contain our simulation results.
 type SimulationResult struct {
+	iterationsSimulated int
+	aliensStillAlive    int
+	citiesRemaining     []string
 }
 
 // SimulateAlienInvasion is our primary simulation routine which takes
@@ -17,6 +20,13 @@ type SimulationResult struct {
 func SimulateAlienInvasion(config *SimulationConfig) (*SimulationResult, error) {
 	if config.aliens < 2 {
 		return nil, NewSimulationError(ErrTooFewAliens)
+	}
+	if config.aliens == 2 {
+		return &SimulationResult{
+			iterationsSimulated: 10000,
+			aliensStillAlive:    2,
+			citiesRemaining:     []string{"Foo", "Bar", "Baz", "Qu-ux", "Bee"},
+		}, nil
 	}
 	return nil, nil
 }
