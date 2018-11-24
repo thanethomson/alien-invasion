@@ -1,10 +1,9 @@
 package main
 
 import (
-    "fmt"
+	"fmt"
 )
 
 func main() {
-    fmt.Println("Hello boilerplate!")
+	fmt.Println("Hello boilerplate!")
 }
-
