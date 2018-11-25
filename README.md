@@ -57,7 +57,12 @@ Bar south=Foo west=Bee
 
 The first line indicates that there is a city called `Foo`. To the north of
 `Foo` is a city called `Bar`, to the west of `Foo` is a city called `Baz`, and
-to the south of `Foo` is a city called `Qu-ux`.
+to the south of `Foo` is a city called `Qu-ux`. Effectively, this would build up
+a map that resembles the following table:
+
+| Bee | Bar   |
+| Baz | Foo   |
+|     | Qu-ux |
 
 See the [maps](./maps/) folder for some example maps.
 
