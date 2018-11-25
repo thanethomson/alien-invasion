@@ -8,6 +8,42 @@ details regarding the problem will be added to this README soon.
 At present, this code is only being tested on MacOS, but should compile just as
 well on most Linux distros that support Golang.
 
+## Building
+To build, once you've cloned the repo, simply do the following:
+
+```bash
+> make
+```
+
+This will build an executable `alien-invasion` in the root of the repo. If you
+do not have [dep](https://golang.github.io/dep/) installed, the `Makefile`
+should take care of installing that into your `GOPATH` for you.
+
+## Running
+Once you've built the `alien-invasion` executable, to run the simulator with the
+example world and a given number of aliens, simply just run the following:
+
+```bash
+# Run with 3 aliens
+> ./alien-invasion -N 3 --use-example-map
+```
+
+For more help, simply run:
+
+```bash
+> ./alien-invasion --help
+Alien invasion simulator! See https://github.com/thanethomson/alien-invasion for more details.
+
+Usage:
+  alien-invasion [flags]
+
+Flags:
+  -N, --alien-count int    the number of aliens to simulate (default 2)
+  -h, --help               help for alien-invasion
+      --use-example-map    use the example world map instead of loading one
+  -m, --world-map string   the file from which to load the world map (default "world-map.txt")
+```
+
 ## Assumptions
 The following assumptions have been made when looking at the problem definition:
 
