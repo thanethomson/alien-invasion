@@ -13,6 +13,11 @@ import (
 // the maximum number of alien moves.
 const SimulationIterationsHardLimit = 20000
 
+// ExampleWorld is the map from the problem statement.
+const ExampleWorld string = `Foo north=Bar west=Baz south=Qu-ux
+Bar south=Foo west=Bee
+`
+
 // SimulationConfig contains the input configuration to our alien world
 // simulator.
 type SimulationConfig struct {
@@ -25,9 +30,11 @@ type SimulationConfig struct {
 
 // SimulationResult will eventually contain our simulation results.
 type SimulationResult struct {
-	iterationsSimulated int
-	aliensStillAlive    int
-	citiesRemaining     []string
+	IterationsSimulated int
+	AliensStillAlive    int
+	CitiesRemaining     []string
+	FinalMap            *WorldMap
+	FinalAliens         []*Alien
 }
 
 // SimulationProgressHandler is a simple interface to handle the various
@@ -35,6 +42,7 @@ type SimulationResult struct {
 type SimulationProgressHandler interface {
 	CityDestroyed(cityName string, alienIDs []int)
 	AllAliensTrapped()
+	AllAliensDead()
 }
 
 type NoopSimulationProgressHandler struct{}
@@ -89,26 +97,37 @@ func (s *Simulation) Simulate() (*SimulationResult, error) {
 
 	alienMoves := 0
 	iter := 0
+	aliensPossiblyTrapped := false
 	for ; alienMoves < s.config.maxAlienMoves && iter < SimulationIterationsHardLimit; iter++ {
 		m, destroyed := s.RunSimulationIteration()
 		for cityName := range destroyed {
 			s.citiesDestroyed.Add(cityName)
 		}
-		// if all aliens are trapped
+		// if all aliens are trapped (or possibly dead - we'll check further on)
 		if m == 0 {
-			if s.config.progressHandler != nil {
-				s.config.progressHandler.AllAliensTrapped()
-			}
+			aliensPossiblyTrapped = true
 			break
 		}
 		alienMoves += m
 	}
 
-	// count how many aliens are still alive
+	// count how many aliens are still alive and build up a list of the living
+	// ones
 	aliensStillAlive := 0
+	livingAliens := []*Alien{}
 	for _, alien := range s.aliens {
 		if alien.alive {
 			aliensStillAlive++
+			livingAliens = append(livingAliens, alien)
+		}
+	}
+	if aliensStillAlive == 0 {
+		if s.config.progressHandler != nil {
+			s.config.progressHandler.AllAliensDead()
+		}
+	} else if aliensPossiblyTrapped {
+		if s.config.progressHandler != nil {
+			s.config.progressHandler.AllAliensTrapped()
 		}
 	}
 
@@ -121,9 +140,11 @@ func (s *Simulation) Simulate() (*SimulationResult, error) {
 	}
 
 	return &SimulationResult{
-		iterationsSimulated: iter,
-		aliensStillAlive:    aliensStillAlive,
-		citiesRemaining:     citiesRemaining,
+		IterationsSimulated: iter,
+		AliensStillAlive:    aliensStillAlive,
+		CitiesRemaining:     citiesRemaining,
+		FinalMap:            worldMap,
+		FinalAliens:         livingAliens,
 	}, nil
 }
 
@@ -133,7 +154,7 @@ func (s *Simulation) scatterAliens() {
 		cityID := s.config.rnd.Uint32() % uint32(cityCount)
 		s.aliens = append(
 			s.aliens,
-			NewAlien(s.worldMap.cities[s.worldMap.cityNames[cityID]]),
+			NewAlien(n, s.worldMap.cities[s.worldMap.cityNames[cityID]]),
 		)
 	}
 }
@@ -179,6 +200,7 @@ func (s *Simulation) RunSimulationIteration() (int, map[string][]int) {
 
 func (h *NoopSimulationProgressHandler) CityDestroyed(cityName string, alienIDs []int) {}
 func (h *NoopSimulationProgressHandler) AllAliensTrapped()                             {}
+func (h *NoopSimulationProgressHandler) AllAliensDead()                                {}
 
 // CityDestroyed prints out the fact that a city has been destroyed to Stdout.
 func (h *StdoutSimulationProgressHandler) CityDestroyed(cityName string, alienIDs []int) {
@@ -197,4 +219,8 @@ func (h *StdoutSimulationProgressHandler) CityDestroyed(cityName string, alienID
 
 func (h *StdoutSimulationProgressHandler) AllAliensTrapped() {
 	fmt.Println("All aliens have been trapped! Simulation will be ended here.")
+}
+
+func (h *StdoutSimulationProgressHandler) AllAliensDead() {
+	fmt.Println("All aliens are dead!")
 }

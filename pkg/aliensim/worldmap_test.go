@@ -7,7 +7,7 @@ import (
 )
 
 func TestSuccessfullyParsingExampleWorldMap(t *testing.T) {
-	m, err := ParseWorldMap(strings.NewReader(exampleWorld))
+	m, err := ParseWorldMap(strings.NewReader(ExampleWorld))
 	if err != nil {
 		t.Error("Parsing failed with error:", err)
 	} else {

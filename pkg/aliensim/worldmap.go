@@ -35,9 +35,13 @@ func ParseWorldMap(worldReader io.Reader) (*WorldMap, error) {
 	scanner := bufio.NewScanner(worldReader)
 	worldMap := NewEmptyWorldMap()
 	for scanner.Scan() {
-		err := worldMap.ParseLine(scanner.Text())
-		if err != nil {
-			return nil, err
+		line := scanner.Text()
+		// skip empty lines
+		if len(line) > 0 {
+			err := worldMap.ParseLine(line)
+			if err != nil {
+				return nil, err
+			}
 		}
 	}
 	if err := scanner.Err(); err != nil {
@@ -107,4 +111,25 @@ func (m *WorldMap) ParseLine(line string) error {
 	}
 	m.parsedLines++
 	return nil
+}
+
+// Render will generate a mapping similar to the input map format, but only
+// containing cities that have not yet been destroyed.
+func (m *WorldMap) Render() string {
+	var b strings.Builder
+
+	for _, cityName := range m.cityNames {
+		city := m.cities[cityName]
+		if !city.destroyed {
+			fmt.Fprintf(&b, "%s", cityName)
+			for dir, neighbour := range city.neighbours {
+				if neighbour != nil && !neighbour.destroyed {
+					fmt.Fprintf(&b, " %s=%s", strings.ToLower(directionNames[dir]), neighbour.name)
+				}
+			}
+			fmt.Fprintf(&b, "\n")
+		}
+	}
+
+	return b.String()
 }

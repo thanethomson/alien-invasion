@@ -6,13 +6,6 @@ import (
 	"testing"
 )
 
-const (
-	// Example world from the problem statement.
-	exampleWorld string = `Foo north=Bar west=Baz south=Qu-ux
-Bar south=Foo west=Bee
-`
-)
-
 type alienCountSimulationErrorPair struct {
 	alienCount int
 	simError   SimulationErrorCode
@@ -46,7 +39,7 @@ func TestTooFewAliens(t *testing.T) {
 	for _, test := range tests {
 		_, err := NewSimulation(
 			newTestSimulationConfig(
-				strings.NewReader(exampleWorld),
+				strings.NewReader(ExampleWorld),
 				test.alienCount,
 			),
 		).Simulate()
@@ -94,7 +87,7 @@ func TestControlledSimulationOfExampleMap(t *testing.T) {
 	for _, test := range tests {
 		res, err := NewSimulation(
 			newTestSimulationConfig(
-				strings.NewReader(exampleWorld),
+				strings.NewReader(ExampleWorld),
 				test.alienCount,
 			),
 		).Simulate()
@@ -104,25 +97,25 @@ func TestControlledSimulationOfExampleMap(t *testing.T) {
 				"and example world, expected no error, but got", err,
 			)
 		}
-		if res.iterationsSimulated != test.iterationsSimulated {
+		if res.IterationsSimulated != test.iterationsSimulated {
 			t.Error(
 				"For N =", test.alienCount,
 				"and example world, expected iterationsSimulated =", test.iterationsSimulated,
-				"but got", res.iterationsSimulated,
+				"but got", res.IterationsSimulated,
 			)
 		}
-		if res.aliensStillAlive != test.aliensStillAlive {
+		if res.AliensStillAlive != test.aliensStillAlive {
 			t.Error(
 				"For N =", test.alienCount,
 				"and example world, expected aliensStillAlive =", test.aliensStillAlive,
-				"but got", res.aliensStillAlive,
+				"but got", res.AliensStillAlive,
 			)
 		}
-		if !stringSlicesEqual(res.citiesRemaining, test.citiesRemaining) {
+		if !stringSlicesEqual(res.CitiesRemaining, test.citiesRemaining) {
 			t.Error(
 				"For N =", test.alienCount,
 				"and example world, expected citiesRemaining =", test.citiesRemaining,
-				"but got", res.citiesRemaining,
+				"but got", res.CitiesRemaining,
 			)
 		}
 	}

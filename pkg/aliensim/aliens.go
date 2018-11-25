@@ -1,17 +1,25 @@
 package aliensim
 
+import "fmt"
+
 // Alien contains the location and state of a specific alien.
 type Alien struct {
+	id    int   // The ID of this alien.
 	city  *City // The city in which we currently find this alien.
 	alive bool  // Is this alien still alive?
 }
 
 // NewAlien creates a living alien in the given city.
-func NewAlien(city *City) *Alien {
+func NewAlien(id int, city *City) *Alien {
 	return &Alien{
+		id:    id,
 		city:  city,
 		alive: true,
 	}
+}
+
+func (a *Alien) String() string {
+	return fmt.Sprintf("Alien %d in %s (alive=%t)", a.id, a.city.name, a.alive)
 }
 
 // MoveInRandomDirection will attempt to move this alien in a random direction,
