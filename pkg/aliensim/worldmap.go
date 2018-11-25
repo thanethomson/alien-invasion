@@ -58,7 +58,7 @@ func ParseWorldMap(worldReader io.Reader) (*WorldMap, error) {
 // world map. On failure, returns an error.
 func (m *WorldMap) ParseLine(line string) error {
 	parts := strings.Split(line, " ")
-	if len(parts) < 2 {
+	if len(parts) < 1 {
 		return NewExtendedSimulationError(
 			ErrFailedToParseLine,
 			fmt.Sprintf(
