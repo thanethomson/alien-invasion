@@ -59,6 +59,8 @@ The first line indicates that there is a city called `Foo`. To the north of
 `Foo` is a city called `Bar`, to the west of `Foo` is a city called `Baz`, and
 to the south of `Foo` is a city called `Qu-ux`.
 
+See the [maps](./maps/) folder for some example maps.
+
 ## Assumptions
 The following assumptions have been made when looking at the problem definition:
 
