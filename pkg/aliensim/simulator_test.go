@@ -1,6 +1,10 @@
 package aliensim
 
-import "testing"
+import (
+	"io"
+	"strings"
+	"testing"
+)
 
 const (
 	// Example world from the problem statement.
@@ -21,6 +25,15 @@ type alienCountSimulationResult struct {
 	citiesRemaining     []string
 }
 
+func newTestSimulationConfig(worldReader io.Reader, aliens int) *SimulationConfig {
+	return &SimulationConfig{
+		worldReader:   worldReader,
+		aliens:        aliens,
+		rnd:           NewSequenceGenerator(),
+		maxAlienMoves: 10000,
+	}
+}
+
 // Makes sure that, if fewer than 2 aliens are specified, the ErrTooFewAliens
 // error is returned from the simulator.
 func TestTooFewAliens(t *testing.T) {
@@ -30,10 +43,12 @@ func TestTooFewAliens(t *testing.T) {
 		{1, ErrTooFewAliens},
 	}
 	for _, test := range tests {
-		_, err := SimulateAlienInvasion(&SimulationConfig{
-			world:  exampleWorld,
-			aliens: test.alienCount,
-		})
+		_, err := SimulateAlienInvasion(
+			newTestSimulationConfig(
+				strings.NewReader(exampleWorld),
+				test.alienCount,
+			),
+		)
 		if ferr, ok := err.(*SimulationError); ok {
 			if ferr.kind != test.simError {
 				t.Error(
@@ -74,10 +89,12 @@ func TestControlledSimulationOfExampleMap(t *testing.T) {
 		{2, 10000, 2, []string{"Foo", "Bar", "Baz", "Qu-ux", "Bee"}},
 	}
 	for _, test := range tests {
-		res, err := SimulateAlienInvasion(&SimulationConfig{
-			world:  exampleWorld,
-			aliens: test.alienCount,
-		})
+		res, err := SimulateAlienInvasion(
+			newTestSimulationConfig(
+				strings.NewReader(exampleWorld),
+				test.alienCount,
+			),
+		)
 		if err != nil {
 			t.Error(
 				"For N =", test.alienCount,
