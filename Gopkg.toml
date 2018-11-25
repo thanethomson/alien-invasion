@@ -29,3 +29,7 @@
   go-tests = true
   unused-packages = true
 
+
+[[constraint]]
+  name = "github.com/deckarep/golang-set"
+  version = "1.7.1"

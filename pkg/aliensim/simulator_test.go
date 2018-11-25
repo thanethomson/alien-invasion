@@ -27,10 +27,11 @@ type alienCountSimulationResult struct {
 
 func newTestSimulationConfig(worldReader io.Reader, aliens int) *SimulationConfig {
 	return &SimulationConfig{
-		worldReader:   worldReader,
-		aliens:        aliens,
-		rnd:           NewSequenceGenerator(),
-		maxAlienMoves: 10000,
+		worldReader:     worldReader,
+		aliens:          aliens,
+		rnd:             NewSequenceGenerator(),
+		maxAlienMoves:   10,
+		progressHandler: nil, // no need to print out progress during testing
 	}
 }
 
@@ -43,12 +44,12 @@ func TestTooFewAliens(t *testing.T) {
 		{1, ErrTooFewAliens},
 	}
 	for _, test := range tests {
-		_, err := SimulateAlienInvasion(
+		_, err := NewSimulation(
 			newTestSimulationConfig(
 				strings.NewReader(exampleWorld),
 				test.alienCount,
 			),
-		)
+		).Simulate()
 		if ferr, ok := err.(*SimulationError); ok {
 			if ferr.kind != test.simError {
 				t.Error(
@@ -86,15 +87,17 @@ func stringSlicesEqual(a, b []string) bool {
 // consistent results.
 func TestControlledSimulationOfExampleMap(t *testing.T) {
 	tests := []alienCountSimulationResult{
-		{2, 10000, 2, []string{"Foo", "Bar", "Baz", "Qu-ux", "Bee"}},
+		{2, 10, 2, []string{"Foo", "Bar", "Baz", "Qu-ux", "Bee"}},
+		{3, 10, 1, []string{"Bar", "Baz", "Qu-ux", "Bee"}},
+		{4, 10, 2, []string{"Foo", "Bar", "Baz", "Qu-ux"}},
 	}
 	for _, test := range tests {
-		res, err := SimulateAlienInvasion(
+		res, err := NewSimulation(
 			newTestSimulationConfig(
 				strings.NewReader(exampleWorld),
 				test.alienCount,
 			),
-		)
+		).Simulate()
 		if err != nil {
 			t.Error(
 				"For N =", test.alienCount,
