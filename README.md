@@ -10,7 +10,7 @@ details regarding the problem will be added to this README soon.
 At present, this code is only being tested on MacOS, but should compile just as
 well on most Linux distros that support Golang.
 
-* Tested with Golang v1.11.2
+* Requires Golang v1.10+
 
 ## Building
 To build, once you've cloned the repo, simply do the following:
