@@ -6,6 +6,12 @@ import (
 	"testing"
 )
 
+const (
+	contradictoryTestMap string = `Foo north=Bar east=Baz south=Qu-ux
+Baz west=Bar
+`
+)
+
 func TestSuccessfullyParsingExampleWorldMap(t *testing.T) {
 	m, err := ParseWorldMap(strings.NewReader(ExampleWorld))
 	if err != nil {
@@ -68,5 +74,30 @@ func TestSuccessfullyParsingExampleWorldMap(t *testing.T) {
 				}
 			}
 		}
+	}
+}
+
+func TestParsingContradictoryMap(t *testing.T) {
+	_, err := ParseWorldMap(strings.NewReader(contradictoryTestMap))
+	// we should get an error
+	if err == nil {
+		t.Error("Expected contradictory test to result in an error")
+	}
+	serr, _ := err.(*SimulationError)
+	if serr.kind != ErrFailedToParseLine {
+		t.Error(
+			"Expected error kind to be", ErrFailedToParseLine,
+			"but got", serr.kind,
+		)
+	}
+	if serr.upstream == nil {
+		t.Error("Expected upstream error to be non-nil, but was nil")
+	}
+	uerr, _ := serr.upstream.(*SimulationError)
+	if uerr.kind != ErrCityAlreadyThere {
+		t.Error(
+			"Expected upstream error kind to be", ErrCityAlreadyThere,
+			"but was", uerr.kind,
+		)
 	}
 }
