@@ -3,8 +3,13 @@
 [![Build Status](https://travis-ci.org/thanethomson/alien-invasion.svg?branch=master)](https://travis-ci.org/thanethomson/alien-invasion)
 
 ## Overview
-This program attempts to solve the **Alien Invasion** coding puzzle. More
-details regarding the problem will be added to this README soon.
+This program attempts to solve the **Alien Invasion** coding puzzle. Basically,
+aliens are going to invade Earth, and we need to simulate their movements in a
+virtual world with virtual cities. Given a particular world map, one can specify
+the number of aliens that will be invading that map. Aliens will be scattered
+randomly across the map in cities. When more than one alien meets in a
+particular city, they fight each other and destroy the city and each other in
+the process.
 
 ## Requirements
 At present, this code is only being tested on MacOS, but should compile just as
