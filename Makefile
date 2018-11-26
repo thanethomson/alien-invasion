@@ -10,7 +10,9 @@ $(DEP):
 
 # Make sure the dependencies have been initialised
 Gopkg.toml: $(DEP)
-	dep init
+	if [ ! -f ./Gopkg.toml ]; then
+		dep init
+	fi
 
 clean:
 	rm -f $(BINARY)
