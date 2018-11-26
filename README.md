@@ -1,5 +1,7 @@
 # Alien Invasion
 
+[![Build Status](https://travis-ci.org/thanethomson/alien-invasion.svg?branch=master)](https://travis-ci.org/thanethomson/alien-invasion)
+
 ## Overview
 This program attempts to solve the **Alien Invasion** coding puzzle. More
 details regarding the problem will be added to this README soon.
